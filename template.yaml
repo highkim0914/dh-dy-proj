@@ -29,6 +29,9 @@ Parameters:
   SubnetIds:
     Type: String
     Default: subnet-b93787d2,subnet-8eef1ed1,subnet-f76a8eb8,subnet-d582efae # db subnet
+  LambdaRoleArn:
+    Type: String
+    Default: arn:aws:iam::471413481509:role/awssamlambdarole
 
 Resources:
   RDBProxy:
@@ -55,7 +58,6 @@ Resources:
           MaxConnectionsPercent: 100
           MaxIdleConnectionsPercent: 50
           ConnectionBorrowTimeout: 120
-
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -66,6 +68,7 @@ Resources:
         - arn:aws:lambda:ap-northeast-2:471413481509:layer:pymysql:1
       Architectures:
         - x86_64
+      Role: !Ref LambdaRoleArn
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -82,6 +85,7 @@ Resources:
         - arn:aws:lambda:ap-northeast-2:471413481509:layer:pymysql:1
       Architectures:
         - x86_64
+      Role: !Ref LambdaRoleArn
       Events:
         FindAsset:
           Type: Api

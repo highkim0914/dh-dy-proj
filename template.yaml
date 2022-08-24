@@ -79,7 +79,7 @@ Resources:
           Properties:
             Auth:
               Authorizer: CognitoAuth
-            Path: /assets/{asset_id}
+            Path: /assets
             Method: post
   UpdateAssetFunction:
     Type: AWS::Serverless::Function

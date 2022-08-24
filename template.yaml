@@ -53,7 +53,7 @@ Resources:
         FindAsset:
           Type: Api
           Properties:
-            Path: /assets/{id}
+            Path: /assets/{asset_id}
             Method: get
   FindAssetsFunction:
     Type: AWS::Serverless::Function
@@ -62,7 +62,7 @@ Resources:
       Handler: findAssets.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        FindAssets:
           Type: Api
           Properties:
             Path: /assets
@@ -74,7 +74,7 @@ Resources:
       Handler: addAsset.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        AddAsset:
           Type: Api
           Properties:
             Auth:
@@ -88,7 +88,7 @@ Resources:
       Handler: updateAsset.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        UpdateAsset:
           Type: Api
           Properties:
             Auth:
@@ -102,7 +102,7 @@ Resources:
       Handler: deleteAsset.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        DeleteAsset:
           Type: Api
           Properties:
             Auth:
@@ -118,7 +118,7 @@ Resources:
       Handler: findPrimaryCategory.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        FindPrimaryCategory:
           Type: Api
           Properties:
             Path: /meta/primary
@@ -130,7 +130,7 @@ Resources:
       Handler: findSecondaryCategory.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        FindSecondaryCategory:
           Type: Api
           Properties:
             Path: /meta/secondary/{primary_id}
@@ -142,7 +142,7 @@ Resources:
       Handler: findMetadata.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        FindMetadata:
           Type: Api
           Properties:
             Path: /meta
@@ -154,7 +154,7 @@ Resources:
       Handler: findMetadataProjects.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        FindMetadataProjects:
           Type: Api
           Properties:
             Path: /meta/project
@@ -166,7 +166,7 @@ Resources:
       Handler: addMetadata.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        AddMetadata:
           Type: Api
           Properties:
             Path: /meta
@@ -178,7 +178,7 @@ Resources:
       Handler: updateMetadata.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        UpdateMetadata:
           Type: Api
           Properties:
             Path: /meta/{metadata_id}
@@ -190,7 +190,7 @@ Resources:
       Handler: deleteMetadata.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
-        FindAsset:
+        DeleteMetadata:
           Type: Api
           Properties:
             Path: /meta/{metadata_id}

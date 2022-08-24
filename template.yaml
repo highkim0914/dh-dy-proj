@@ -12,14 +12,14 @@ Globals:
     Tracing: Active
     Runtime: python3.9
     Layers:
-      - arn:aws:lambda:ap-northeast-2:471413481509:layer:pymysql:1
+      - arn:aws:lambda:ap-northeast-2:471413481509:layer:pymysql:1 # 레이어 설정
   Api:
     TracingEnabled: True
     Auth:
       Authorizers:
         MyCognitoAuth:
           UserPoolArn:
-            - arn:aws:cognito-idp:ap-northeast-2:471413481509:userpool/ap-northeast-2_95Reiy0i0
+            - arn:aws:cognito-idp:ap-northeast-2:471413481509:userpool/ap-northeast-2_95Reiy0i0 # 기본 권한 부여자 설정
 Parameters:
   ProxyName:
     Type: String
@@ -78,6 +78,8 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /hello
+            Auth:
+              Authorizer: MyCognitoAuth
             Method: get
   FindAssetFunction:
     Type: AWS::Serverless::Function

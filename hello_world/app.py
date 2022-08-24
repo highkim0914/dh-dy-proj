@@ -7,7 +7,7 @@ from hello_world import Sample
 
 def lambda_handler(event, context):
 
-    client = boto3.client()
+    client = boto3.client('rds')
 
     return {
         "statusCode": 200,

@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  인턴 과제용 AWS SAM 템플릿
+  aws template for asset&metadata CMS
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -41,44 +41,7 @@ Parameters:
     Default: arn:aws:iam::471413481509:role/awssamlambdarole
 
 Resources:
-  RDBProxy:
-    Type: AWS::RDS::DBProxy
-    Properties:
-      DebugLogging: true
-      DBProxyName: !Ref ProxyName
-      EngineFamily: MYSQL
-      IdleClientTimeout: 120
-      RequireTLS: true
-      RoleArn:
-        !Ref BootstrapSecretReaderRoleArn
-      Auth:
-        - {AuthScheme: SECRETS, SecretArn: !Ref BootstrapProxySecretArn, IAMAuth: DISABLED}
-      VpcSubnetIds:
-        Fn::Split: [",", !Ref SubnetIds]
-  ProxyTargetGroup:
-    Type: AWS::RDS::DBProxyTargetGroup
-    Properties:
-      DBProxyName: !Ref RDBProxy
-      DBInstanceIdentifiers: [!Ref InstanceName]
-      TargetGroupName: default
-      ConnectionPoolConfigurationInfo:
-          MaxConnectionsPercent: 100
-          MaxIdleConnectionsPercent: 50
-          ConnectionBorrowTimeout: 120
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
-      Role: !Ref LambdaRoleArn
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /hello
-            Auth:
-              Authorizer: CognitoAuth
-            Method: get
+
 #asset
   FindAssetFunction:
     Type: AWS::Serverless::Function

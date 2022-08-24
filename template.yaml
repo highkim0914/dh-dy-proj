@@ -16,19 +16,19 @@ Globals:
 Parameters:
   ProxyName:
     Type: String
-    Default: mysqlProxy
+    Default: mysqlProxy # db 프록시 이름
   InstanceName:
     Type: String
     Default: mysql
   BootstrapSecretReaderRoleArn:
     Type: String
-    Default: arn:aws:iam::471413481509:role/RDSSecretManagerAccessRole
+    Default: arn:aws:iam::471413481509:role/RDSSecretManagerAccessRole # 시크릿 매니저 액세스 가능한 iam 역할
   BootstrapProxySecretArn:
     Type: String
-    Default: arn:aws:secretsmanager:ap-northeast-2:471413481509:secret:mysqlDatabaseSecret-5fgk8w
+    Default: arn:aws:secretsmanager:ap-northeast-2:471413481509:secret:mysqlDatabaseSecret-5fgk8w # secretsmanager arn
   SubnetIds:
     Type: String
-    Default: subnet-b93787d2,subnet-8eef1ed1,subnet-f76a8eb8,subnet-d582efae
+    Default: subnet-b93787d2,subnet-8eef1ed1,subnet-f76a8eb8,subnet-d582efae # db subnet
 
 Resources:
   RDBProxy:
@@ -72,6 +72,23 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+  FindAssetFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: asset/
+      Handler: findAsset.lambda_handler
+      Runtime : python3.9
+      Layers:
+        - arn:aws:lambda:ap-northeast-2:471413481509:layer:pymysql:1
+      Architectures:
+        - x86_64
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Path: /assets/{id}
+            Method: get
+
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

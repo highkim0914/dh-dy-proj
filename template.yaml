@@ -19,8 +19,7 @@ Globals:
       Authorizers:
         MyCognitoAuth:
           UserPoolArn:
-            Fn::GetAtt:
-              - arn:aws:cognito-idp:ap-northeast-2:471413481509:userpool/ap-northeast-2_95Reiy0i0
+            - arn:aws:cognito-idp:ap-northeast-2:471413481509:userpool/ap-northeast-2_95Reiy0i0
 Parameters:
   ProxyName:
     Type: String

@@ -81,6 +81,7 @@ Resources:
             Auth:
               Authorizer: CognitoAuth
             Method: get
+#asset
   FindAssetFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -93,11 +94,147 @@ Resources:
           Properties:
             Path: /assets/{id}
             Method: get
-        FindAssetPost:
+  FindAssetsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: asset/
+      Handler: findAssets.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
           Type: Api
           Properties:
             Path: /assets
+            Method: get
+  AddAssetFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: asset/
+      Handler: addAsset.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Auth:
+              Authorizer: CognitoAuth
+            Path: /assets/{asset_id}
             Method: post
+  UpdateAssetFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: asset/
+      Handler: updateAsset.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Auth:
+              Authorizer: CognitoAuth
+            Path: /assets/{asset_id}
+            Method: put
+  DeleteAssetFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: asset/
+      Handler: deleteAsset.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Auth:
+              Authorizer: CognitoAuth
+            Path: /assets/{asset_id}
+            Method: delete
+
+# metadata
+  FindPrimaryCategoryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: metadata/
+      Handler: findPrimaryCategory.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Path: /meta/primary
+            Method: get
+  FindSecondaryCategoryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: metadata/
+      Handler: findSecondaryCategory.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Path: /meta/secondary/{primary_id}
+            Method: get
+  FindMetadataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: metadata/
+      Handler: findMetadata.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Path: /meta
+            Method: get
+  FindMetadataProjectsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: metadata/
+      Handler: findMetadataProjects.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Path: /meta/project
+            Method: get
+  AddMetadataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: metadata/
+      Handler: addMetadata.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Path: /meta
+            Method: post
+  UpdateMetadataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: metadata/
+      Handler: updateMetadata.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Path: /meta/{metadata_id}
+            Method: put
+  DeleteMetadataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: metadata/
+      Handler: deleteMetadata.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindAsset:
+          Type: Api
+          Properties:
+            Path: /meta/{metadata_id}
+            Method: delete
+
 
 
 Outputs:

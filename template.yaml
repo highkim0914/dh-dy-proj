@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app-python
+
+  Sample SAM Template for sam-app-python
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+    Tracing: Active
+  Api:
+    TracingEnabled: True
+
+Parameters:
+  ProxyName:
+    Type: String
+    Default: mysqlProxy
+  InstanceName:
+    Type: String
+    Default: mysql
+  BootstrapSecretReaderRoleArn:
+    Type: String
+    Default: arn:aws:iam::471413481509:role/RDSSecretManagerAccessRole
+  BootstrapProxySecretArn:
+    Type: String
+    Default: arn:aws:secretsmanager:ap-northeast-2:471413481509:secret:mysqlDatabaseSecret-5fgk8w
+  SubnetIds:
+    Type: String
+    Default: subnet-b93787d2,subnet-8eef1ed1,subnet-f76a8eb8,subnet-d582efae
+
+Resources:
+  RDBProxy:
+    Type: AWS::RDS::DBProxy
+    Properties:
+      DebugLogging: true
+      DBProxyName: !Ref ProxyName
+      EngineFamily: MYSQL
+      IdleClientTimeout: 120
+      RequireTLS: true
+      RoleArn:
+        !Ref BootstrapSecretReaderRoleArn
+      Auth:
+        - {AuthScheme: SECRETS, SecretArn: !Ref BootstrapProxySecretArn, IAMAuth: DISABLED}
+      VpcSubnetIds:
+        Fn::Split: [",", !Ref SubnetIds]
+  ProxyTargetGroup:
+    Type: AWS::RDS::DBProxyTargetGroup
+    Properties:
+      DBProxyName: !Ref RDBProxy
+      DBInstanceIdentifiers: [!Ref InstanceName]
+      TargetGroupName: default
+      ConnectionPoolConfigurationInfo:
+          MaxConnectionsPercent: 100
+          MaxIdleConnectionsPercent: 50
+          ConnectionBorrowTimeout: 120
+
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: hello_world/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Layers:
+        - arn:aws:lambda:ap-northeast-2:471413481509:layer:pymysql:1
+      Architectures:
+        - x86_64
+      Events:
+        HelloWorld:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /hello
+            Method: get
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  HelloWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+  HelloWorldFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt HelloWorldFunction.Arn
+  HelloWorldFunctionIamRole:
+    Description: "Implicit IAM Role created for Hello World function"
+    Value: !GetAtt HelloWorldFunctionRole.Arn

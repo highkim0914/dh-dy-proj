@@ -11,13 +11,15 @@ Globals:
     Timeout: 3
     Tracing: Active
     Runtime: python3.9
+    Architectures:
+      - x86_64
     Layers:
       - arn:aws:lambda:ap-northeast-2:471413481509:layer:pymysql:1 # 레이어 설정
   Api:
     TracingEnabled: True
     Auth:
       Authorizers:
-        MyCognitoAuth:
+        CognitoAuth:
           UserPoolArn:
             - arn:aws:cognito-idp:ap-northeast-2:471413481509:userpool/ap-northeast-2_95Reiy0i0 # 기본 권한 부여자 설정
 Parameters:
@@ -70,8 +72,6 @@ Resources:
     Properties:
       CodeUri: hello_world/
       Handler: app.lambda_handler
-      Architectures:
-        - x86_64
       Role: !Ref LambdaRoleArn
       Events:
         HelloWorld:
@@ -79,15 +79,13 @@ Resources:
           Properties:
             Path: /hello
             Auth:
-              Authorizer: MyCognitoAuth
+              Authorizer: CognitoAuth
             Method: get
   FindAssetFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: asset/
       Handler: findAsset.lambda_handler
-      Architectures:
-        - x86_64
       Role: !Ref LambdaRoleArn
       Events:
         FindAsset:
@@ -95,6 +93,11 @@ Resources:
           Properties:
             Path: /assets/{id}
             Method: get
+        FindAssetPost:
+          Type: Api
+          Properties:
+            Path: /assets
+            Method: post
 
 
 Outputs:

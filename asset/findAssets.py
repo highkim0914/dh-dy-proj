@@ -35,7 +35,9 @@ def lambda_handler(event, context):
     for key in query_string_dict.keys():
         values = query_string_dict[key]
         if len(values) == 1:
-            where_clause_list.append(f'({key} = {values[0]})')
+            value = str(values[0])
+            print(value)
+            where_clause_list.append(f'{key} = \'{value}\'')
         else:
             value = str(tuple(values))
             if 'page' in key or 'sort' in key:

@@ -33,28 +33,30 @@ def lambda_handler(event, context):
 
     where_clause_list = []
     for key in query_string_dict.keys():
+        if 'page' in key or 'sort' in key:
+            continue
         values = query_string_dict[key]
-        if len(values) == 1:
-            value = str(values[0])
-            print(value)
-            where_clause_list.append(f'{key} = \'{value}\'')
+
+        if '_at' in key:
+            where_clause_list.append(f'{key} >= {values[0]} and {key} <= {values[1]}')
         else:
-            if 'page' in key or 'sort' in key:
-                continue
-            elif '_at' in key:
-                where_clause_list.append(f'{key} >= {values[0]} and {key} <= {values[1]}')
-            else:
+            if values[0] != "":
                 value = '|'.join(values)
                 where_clause_list.append(f'{key} regexp "{value}"')
 
-    where_clause = ' and '.join(where_clause_list)
+    if len(where_clause_list) != 0:
+        where_clause = 'where' + ' and '.join(where_clause_list)
+    else:
+        where_clause = ""
+
     page_offset = event['queryStringParameters']['page_offset']
     sort = event['queryStringParameters']['sort']
     sort_by, how = sort.split(",")
     try:
         conn = pymysql.connect(host=ENDPOINT, user=USER, passwd=get_secret(), database=DBNAME)
         cur = conn.cursor(pymysql.cursors.DictCursor)
-        sql_query = f'SELECT * FROM asset inner join asset_image_urls as aiu on asset.id = aiu.asset_id where {where_clause} order by {sort_by} {how} limit 6 offset {page_offset}'
+        sql_query = f'SELECT * FROM asset inner join asset_image_urls as aiu on asset.id = aiu.asset_id {where_clause} ' \
+                    f'order by {sort_by} {how} limit 6 offset {page_offset}'
         print(sql_query)
         cur.execute(sql_query)
         query_results = cur.fetchall()

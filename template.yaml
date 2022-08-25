@@ -109,7 +109,18 @@ Resources:
               Authorizer: CognitoAuth
             Path: /assets/{asset_id}
             Method: delete
-
+  CheckAssetNameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: asset/
+      Handler: checkAssetName.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        AddAsset:
+          Type: Api
+          Properties:
+            Path: /assets/names/{asset_name}
+            Method: get
 # metadata
   FindPrimaryCategoryFunction:
     Type: AWS::Serverless::Function

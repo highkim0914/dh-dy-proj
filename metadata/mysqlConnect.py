@@ -24,3 +24,10 @@ def getCursor():
         return conn.cursor()
     except Exception as e:
         print("Database connection failed due to {}".format(e))
+
+def getDictCursor():
+    try:
+        conn = pymysql.connect(host=ENDPOINT, user=USER, passwd=get_secret(), database=DBNAME)
+        return conn.cursor(pymysql.cursors.DictCursor)
+    except Exception as e:
+        print("Database connection failed due to {}".format(e))

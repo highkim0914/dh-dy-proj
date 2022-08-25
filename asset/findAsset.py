@@ -1,3 +1,4 @@
+import datetime
 import boto3
 import pymysql
 import json
@@ -19,27 +20,25 @@ def get_secret():
     print(database_secrets['password'])
 
 
+def get_str_value(obj):
+    if isinstance(obj, datetime.datetime):
+        return str(obj)
+    else:
+        return obj
 def lambda_handler(event, context):
-    print(event)
-
-    get_secret()
-    client = boto3.client('rds')
-    token = client.generate_db_auth_token(DBHostname=ENDPOINT, Port=PORT, DBUsername=USER, Region=REGION)
-    print(token)
+    asset_id = event['pathParameters']['asset_id']
+    print(asset_id)
     try:
-        conn = pymysql.connect(host=ENDPOINT, user=USER, passwd=token, database=DBNAME)
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM asset")
+        conn = pymysql.connect(host=ENDPOINT, user=USER, passwd=get_secret(), database=DBNAME)
+        cur = conn.cursor(pymysql.cursors.DictCursor)
+        cur.execute(f'SELECT * FROM asset inner join asset_image_urls as aiu on asset.id = aiu.asset_id where asset.id = {asset_id}')
         query_results = cur.fetchall()
-        print(query_results)
+        for i in range(len(query_results)):
+            query_results[i] = {obj:get_str_value(query_results[i][obj]) for obj in query_results[i].keys()}
+        return {
+            "statusCode": 200,
+            "body": json.dumps(query_results)
+        }
     except Exception as e:
         print("Database connection failed due to {}".format(e))
-    return {
-        "statusCode": 200,
-        "body": json.dumps({
-            "message": "hello world"
-        }),
-    }
-
-
 

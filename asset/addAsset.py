@@ -34,15 +34,13 @@ def lambda_handler(event, context):
     asset_url = body_json['asset_url']
     image_urls = body_json['image_urls']
     details = body_json['details']
-    creator = body_json['creator']
     now = str(datetime.datetime.now())
-    asset_value = (name, creator, creator, now, now, asset_url)
-    print(asset_value)
     request_username = event['requestContext']['authorizer']['claims']['cognito:username']
+    asset_value = (name, request_username, request_username, now, now, asset_url, details)
     try:
         conn = pymysql.connect(host=ENDPOINT, user=USER, passwd=get_secret(), database=DBNAME)
         cur = conn.cursor(pymysql.cursors.DictCursor)
-        insert_query = f'INSERT INTO asset (`name`, `creator`, `updater`, `created_at`, `updated_at`, `asset_url`) VALUES {asset_value}'
+        insert_query = f'INSERT INTO asset (`name`, `creator`, `updater`, `created_at`, `updated_at`, `asset_url`, `details`) VALUES {asset_value}'
         print(insert_query)
         cur.execute(insert_query);
         inserted_id = conn.insert_id()

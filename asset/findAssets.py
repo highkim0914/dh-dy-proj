@@ -39,13 +39,13 @@ def lambda_handler(event, context):
             print(value)
             where_clause_list.append(f'{key} = \'{value}\'')
         else:
-            value = str(tuple(values))
             if 'page' in key or 'sort' in key:
                 continue
             elif '_at' in key:
                 where_clause_list.append(f'{key} >= {values[0]} and {key} <= {values[1]}')
             else:
-                where_clause_list.append(f'{key} in {value}')
+                value = '|'.join(values)
+                where_clause_list.append(f'{key} regexp "{value}"')
 
     where_clause = ' and '.join(where_clause_list)
     page_offset = event['queryStringParameters']['page_offset']

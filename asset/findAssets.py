@@ -32,6 +32,7 @@ def lambda_handler(event, context):
     query_string_dict = event['multiValueQueryStringParameters']
 
     where_clause_list = []
+    has_where = False
     for key in query_string_dict.keys():
         if 'page' in key or 'sort' in key:
             continue
@@ -43,8 +44,9 @@ def lambda_handler(event, context):
             if values[0] != "":
                 value = '|'.join(values)
                 where_clause_list.append(f'{key} regexp "{value}"')
+                has_where = True
 
-    if len(where_clause_list) != 0:
+    if has_where:
         where_clause = 'where' + ' and '.join(where_clause_list)
     else:
         where_clause = ""

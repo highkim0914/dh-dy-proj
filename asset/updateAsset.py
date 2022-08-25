@@ -9,6 +9,7 @@ USER = "admin"
 REGION = "ap-northeast-2"
 DBNAME = "uplus"
 
+
 def get_secret():
     client = boto3.client('secretsmanager')
 
@@ -19,11 +20,14 @@ def get_secret():
     database_secrets = json.loads(response['SecretString'])
     return database_secrets['password']
 
+
 def get_str_value(obj):
     if isinstance(obj, datetime.datetime):
         return str(obj)
     else:
         return obj
+
+
 def lambda_handler(event, context):
     body_json = json.loads(event['body'])
     id = body_json['id']
@@ -40,6 +44,7 @@ def lambda_handler(event, context):
         select_query = f'SELECT * FROM asset where id = {id}'
         print(select_query)
         cur.execute(select_query)
+        # 기존 에셋 정보 - 이후 로그 작성 시 사용할 예정
         select_result = cur.fetchone()
         update_query = f"UPDATE asset SET `name` = '{name}', `asset_url` = '{asset_url}', `updater` = '{request_username}, " \
                        f"`details` = '{details}', `updated_at` = '{now}' "

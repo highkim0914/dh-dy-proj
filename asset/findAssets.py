@@ -41,8 +41,10 @@ def lambda_handler(event, context):
     try:
         conn = get_connection()
         cur = get_dict_cursor(conn)
-        sql_query = f'SELECT * FROM asset inner join asset_image_urls as aiu on asset.id = aiu.asset_id {where_clause} ' \
-                    f'order by {sort_by} {how} limit 6 offset {page_offset}'
+        sql_query = f'SELECT a.id, a.name, a.creator, a.updater, a.created_at, a.updated_at, a.asset_url, a.details, ' \
+                    f'u.url ' \
+                    f'FROM asset as a inner join asset_image_urls as u on asset.id = u.asset_id {where_clause} ' \
+                    f'order by {sort_by} {how} group by a.id limit 6 offset {page_offset}'
         print(sql_query)
         cur.execute(sql_query)
         query_results = cur.fetchall()

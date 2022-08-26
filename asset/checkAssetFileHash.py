@@ -3,24 +3,26 @@ import boto3
 import pymysql
 import json
 from mysqlConnect import *
-
 def lambda_handler(event, context):
-    asset_name = event['pathParameters']['asset_name']
-    print(asset_name)
+    asset_id = event['pathParameters']['asset_id']
+    uploading_hash = event['queryStringParameters']['hash']
+    print(asset_id)
     try:
         conn = get_connection()
         cur = get_dict_cursor(conn)
-        cur.execute(f'SELECT * FROM asset where asset.name = {asset_name}')
+        cur.execute(f'SELECT asset.file_hash FROM asset where asset.id = {asset_id}')
         query_results = cur.fetchall()
-        if len(query_results) == 0:
+        existing_hash = query_results[0]['file_hash']
+        if uploading_hash == existing_hash:
             return {
                 "statusCode": 200,
-                "body": "사용 가능한 asset 이름입니다."
+                "body": "같은 파일입니다."
             }
         else:
             return {
                 "statusCode": 200,
-                "body": "이미 존재하는 asset 이름입니다."
+                "body": "다른 파일입니다."
             }
+
     except Exception as e:
         print("Database connection failed due to {}".format(e))

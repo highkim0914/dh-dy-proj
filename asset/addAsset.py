@@ -31,9 +31,10 @@ def lambda_handler(event, context):
             cur.execute(insert_image_url_query)
         return {
             "statusCode": 200,
-            "body": {
+            "body": json.dumps({
                 "id": inserted_id
-            }
+                }
+            )
         }
     except Exception as e:
         print("Database connection failed due to {}".format(e))

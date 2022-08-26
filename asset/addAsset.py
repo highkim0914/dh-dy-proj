@@ -9,7 +9,7 @@ def lambda_handler(event, context):
     body_json = json.loads(event['body'])
     name = body_json['name']
     asset_url = body_json['asset_url']
-    image_urls = body_json['image_urls']
+    image_urls = body_json['image_urls'].split(",")
     details = body_json['details']
     file_hash = body_json['file_hash']
     now = str(datetime.datetime.now())
@@ -31,7 +31,9 @@ def lambda_handler(event, context):
             cur.execute(insert_image_url_query)
         return {
             "statusCode": 200,
-            "body": " asset 추가가 성공하였습니다."
+            "body": {
+                "id": inserted_id
+            }
         }
     except Exception as e:
         print("Database connection failed due to {}".format(e))

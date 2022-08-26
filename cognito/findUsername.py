@@ -7,7 +7,11 @@ from mysqlConnect import *
 
 def lambda_handler(event, context):
     request_username = event['requestContext']['authorizer']['claims']['cognito:username']
-    request_group = event['requestContext']['authorizer']['claims']['cognito:group']
+    request_group = ''
+    try:
+        request_group = event['requestContext']['authorizer']['claims']['cognito:group']
+    except Exception as e:
+        request_group = ''
 
     return {
         "statusCode": 200,

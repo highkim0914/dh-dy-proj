@@ -22,7 +22,7 @@ def get_secret():
 def get_connection():
     try:
         conn = pymysql.connect(host=ENDPOINT, user=USER, passwd=get_secret(), database=DBNAME)
-        return conn;
+        return conn
     except Exception as e:
         print("Database connection failed due to {}".format(e))
 

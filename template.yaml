@@ -192,6 +192,8 @@ Resources:
         AddMetadata:
           Type: Api
           Properties:
+            Auth:
+              Authorizer: CognitoAuth
             Path: /meta
             Method: post
   UpdateMetadataFunction:
@@ -204,6 +206,8 @@ Resources:
         UpdateMetadata:
           Type: Api
           Properties:
+            Auth:
+              Authorizer: CognitoAuth
             Path: /meta/{metadata_id}
             Method: put
   DeleteMetadataFunction:
@@ -216,10 +220,26 @@ Resources:
         DeleteMetadata:
           Type: Api
           Properties:
+            Auth:
+              Authorizer: CognitoAuth
             Path: /meta/{metadata_id}
             Method: delete
 
-
+#cognito
+  FindUsernameFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: cognito/
+      Handler: findUsername.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        DeleteMetadata:
+          Type: Api
+          Properties:
+            Auth:
+              Authorizer: CognitoAuth
+            Path: /cognito
+            Method: get
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

@@ -4,6 +4,14 @@ import pymysql
 import json
 from mysqlConnect import *
 
+
+def get_str_value(obj):
+    if isinstance(obj, datetime.datetime):
+        return str(obj)
+    else:
+        return obj
+
+
 def lambda_handler(event, context):
     query_string_dict = event['multiValueQueryStringParameters']
 

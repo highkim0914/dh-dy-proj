@@ -3,6 +3,8 @@ import boto3
 import pymysql
 import json
 from mysqlConnect import *
+
+
 def lambda_handler(event, context):
     asset_id = event['pathParameters']['asset_id']
     uploading_hash = event['queryStringParameters']['hash']

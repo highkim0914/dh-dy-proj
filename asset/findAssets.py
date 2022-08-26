@@ -37,7 +37,7 @@ def lambda_handler(event, context):
         where_clause = ""
 
     limit = 6
-    page_offset = event['queryStringParameters']['page_offset'] * limit
+    page_offset = int(event['queryStringParameters']['page_offset']) * limit
     sort = event['queryStringParameters']['sort']
     sort_by, how = sort.split(",")
     try:

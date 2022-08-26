@@ -2,35 +2,14 @@ import datetime
 import boto3
 import pymysql
 import json
+from mysqlConnect import *
 
-ENDPOINT = "mysql.c14b7b28namw.ap-northeast-2.rds.amazonaws.com"  # rds endpoint
-PORT = "3306"
-USER = "rdsproxyadmin"
-REGION = "ap-northeast-2"
-DBNAME = "uplus"
-
-def get_secret():
-    client = boto3.client('secretsmanager')
-
-    response = client.get_secret_value(
-        SecretId='mysqlDatabaseSecret'
-    )
-
-    database_secrets = json.loads(response['SecretString'])
-    print(database_secrets['password'])
-
-
-def get_str_value(obj):
-    if isinstance(obj, datetime.datetime):
-        return str(obj)
-    else:
-        return obj
 def lambda_handler(event, context):
     asset_id = event['pathParameters']['asset_id']
     print(asset_id)
     try:
-        conn = pymysql.connect(host=ENDPOINT, user=USER, passwd=get_secret(), database=DBNAME)
-        cur = conn.cursor(pymysql.cursors.DictCursor)
+        conn = get_connection()
+        cur = get_dict_cursor(conn)
         cur.execute(f'SELECT * FROM asset inner join asset_image_urls as aiu on asset.id = aiu.asset_id where asset.id = {asset_id}')
         query_results = cur.fetchall()
         for i in range(len(query_results)):

@@ -2,47 +2,24 @@ import datetime
 import boto3
 import pymysql
 import json
-
-ENDPOINT = "mysql.c14b7b28namw.ap-northeast-2.rds.amazonaws.com"  # rds endpoint
-PORT = "3306"
-USER = "admin"
-REGION = "ap-northeast-2"
-DBNAME = "uplus"
-
-
-def get_secret():
-    client = boto3.client('secretsmanager')
-
-    response = client.get_secret_value(
-        SecretId='mysqlDatabaseSecret'
-    )
-
-    database_secrets = json.loads(response['SecretString'])
-    return database_secrets['password']
-
-
-def get_str_value(obj):
-    if isinstance(obj, datetime.datetime):
-        return str(obj)
-    else:
-        return obj
-
-
+from mysqlConnect import *
 def lambda_handler(event, context):
     body_json = json.loads(event['body'])
     name = body_json['name']
     asset_url = body_json['asset_url']
     image_urls = body_json['image_urls']
     details = body_json['details']
+    file_hash = body_json['file_hash']
     now = str(datetime.datetime.now())
     request_username = event['requestContext']['authorizer']['claims']['cognito:username']
-    asset_value = (name, request_username, request_username, now, now, asset_url, details)
+    asset_value = (name, request_username, request_username, now, now, asset_url, details, file_hash)
     try:
-        conn = pymysql.connect(host=ENDPOINT, user=USER, passwd=get_secret(), database=DBNAME)
-        cur = conn.cursor(pymysql.cursors.DictCursor)
-        insert_query = f'INSERT INTO asset (`name`, `creator`, `updater`, `created_at`, `updated_at`, `asset_url`, `details`) VALUES {asset_value}'
+        conn = get_connection()
+        cur = get_dict_cursor(conn)
+        insert_query = f'INSERT INTO asset (`name`, `creator`, `updater`, `created_at`, `updated_at`, `asset_url`, `details`, `file_hash`) ' \
+                       f'VALUES {asset_value}'
         print(insert_query)
-        cur.execute(insert_query);
+        cur.execute(insert_query)
         inserted_id = conn.insert_id()
         for url in image_urls:
             image_url_value = (inserted_id, url)

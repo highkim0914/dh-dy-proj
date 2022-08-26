@@ -43,13 +43,14 @@ def lambda_handler(event, context):
         cur = get_dict_cursor(conn)
         sql_query = f'SELECT a.id, a.name, a.creator, a.updater, a.created_at, a.updated_at, a.asset_url, a.details, ' \
                     f'u.url ' \
-                    f'FROM asset as a inner join asset_image_urls as u on asset.id = u.asset_id {where_clause} ' \
-                    f'order by {sort_by} {how} group by a.id limit 6 offset {page_offset}'
+                    f'FROM asset as a inner join asset_image_urls as u on a.id = u.asset_id {where_clause} ' \
+                    f'group by a.id order by {sort_by} {how} limit 6 offset {page_offset}'
         print(sql_query)
         cur.execute(sql_query)
         query_results = cur.fetchall()
         for i in range(len(query_results)):
             query_results[i] = {obj: get_str_value(query_results[i][obj]) for obj in query_results[i].keys()}
+        print(query_results)
         return {
             "statusCode": 200,
             "body": json.dumps(query_results)

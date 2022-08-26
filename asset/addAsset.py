@@ -3,6 +3,8 @@ import boto3
 import pymysql
 import json
 from mysqlConnect import *
+
+
 def lambda_handler(event, context):
     body_json = json.loads(event['body'])
     name = body_json['name']
@@ -16,7 +18,8 @@ def lambda_handler(event, context):
     try:
         conn = get_connection()
         cur = get_dict_cursor(conn)
-        insert_query = f'INSERT INTO asset (`name`, `creator`, `updater`, `created_at`, `updated_at`, `asset_url`, `details`, `file_hash`) ' \
+        insert_query = f'INSERT INTO asset ' \
+                       f'(`name`, `creator`, `updater`, `created_at`, `updated_at`, `asset_url`, `details`, `file_hash`) ' \
                        f'VALUES {asset_value}'
         print(insert_query)
         cur.execute(insert_query)

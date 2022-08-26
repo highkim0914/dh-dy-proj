@@ -5,7 +5,7 @@ import json
 
 ENDPOINT = "mysql.c14b7b28namw.ap-northeast-2.rds.amazonaws.com"  # rds endpoint
 PORT = "3306"
-USER = "admin"
+USER = "rdsproxyadmin"
 REGION = "ap-northeast-2"
 DBNAME = "uplus"
 
@@ -17,7 +17,8 @@ def get_secret():
     )
 
     database_secrets = json.loads(response['SecretString'])
-    return database_secrets['password']
+    print(database_secrets['password'])
+
 
 def get_str_value(obj):
     if isinstance(obj, datetime.datetime):
@@ -40,3 +41,4 @@ def lambda_handler(event, context):
         }
     except Exception as e:
         print("Database connection failed due to {}".format(e))
+

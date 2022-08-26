@@ -29,6 +29,7 @@ def lambda_handler(event, context):
             insert_image_url_query = f'INSERT INTO asset_image_urls (`asset_id`, `url`) VALUES {image_url_value}'
             print(insert_image_url_query)
             cur.execute(insert_image_url_query)
+        conn.commit()
         return {
             "statusCode": 200,
             "body": json.dumps({

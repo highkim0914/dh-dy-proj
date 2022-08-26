@@ -11,7 +11,7 @@ def lambda_handler(event, context):
         conn = get_connection()
         cur = get_dict_cursor(conn)
         cur.execute(
-            f'DELETE * FROM asset inner join metadata as m on asset.id = m.asset_id where asset.id = {asset_id}')
+            f'SELECT * FROM asset inner join metadata as m on asset.id = m.asset_id where asset.id = {asset_id}')
         query_results = cur.fetchall()
         if len(query_results) == 0:
             return {
@@ -20,6 +20,7 @@ def lambda_handler(event, context):
             }
         else:
             cur.execute(f'DELETE FROM asset where asset.id = {asset_id}')
+            conn.commit()
             return {
                 "statusCode": 200,
                 "body": "asset 삭제를 성공하였습니다."

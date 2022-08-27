@@ -2,7 +2,7 @@ import datetime
 import boto3
 import pymysql
 import json
-from mysqlConnect import *
+from dbConnect import *
 
 
 def get_str_value(obj):

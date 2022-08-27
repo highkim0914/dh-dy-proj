@@ -2,7 +2,7 @@ import datetime
 import boto3
 import pymysql
 import json
-from mysqlConnect import *
+from dbConnect import *
 
 def lambda_handler(event, context):
     body_json = json.loads(event['body'])

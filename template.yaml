@@ -12,7 +12,7 @@ Globals:
     Architectures:
       - x86_64
     Layers:
-      - arn:aws:lambda:ap-northeast-2:471413481509:layer:pymysql:1 # 레이어 설정
+      - arn:aws:lambda:ap-northeast-2:471413481509:layer:pymysql:2 # 레이어 설정
   Api:
     TracingEnabled: True
     Auth:

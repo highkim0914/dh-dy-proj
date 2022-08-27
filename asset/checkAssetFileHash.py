@@ -18,12 +18,18 @@ def lambda_handler(event, context):
         if uploading_hash == existing_hash:
             return {
                 "statusCode": 200,
-                "body": "같은 파일입니다."
+                "body": json.dumps({
+                    "is_same": "true",
+                    "message": "같은 파일입니다."
+                })
             }
         else:
             return {
                 "statusCode": 200,
-                "body": "다른 파일입니다."
+                "body": json.dumps({
+                    "is_same": "false",
+                    "message": "다른 파일입니다."
+                })
             }
 
     except Exception as e:

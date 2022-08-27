@@ -23,7 +23,7 @@ def lambda_handler(event, context):
         values = query_string_dict[key]
 
         if '_at' in key:
-            where_clause_list.append(f'{key} >= "{values[0]}" and {key} <= "{values[1]}" ')
+            where_clause_list.append(f'{key} >= "{values[0]}" and {key} <= "{values[1]} 23:59:59" ')
             has_where = True
         else:
             if values[0] != "":

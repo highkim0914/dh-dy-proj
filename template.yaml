@@ -182,6 +182,18 @@ Resources:
           Properties:
             Path: /meta/project
             Method: get
+  FindMetadataAssetsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: metadata/
+      Handler: findMetadataAssets.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        FindMetadataProjects:
+          Type: Api
+          Properties:
+            Path: /meta/asset
+            Method: get
   AddMetadataFunction:
     Type: AWS::Serverless::Function
     Properties:

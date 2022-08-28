@@ -3,14 +3,8 @@ from mysqlConnect import getDictCursor
 
 def lambda_handler(event, context):
     cursor = getDictCursor()
-
-
-    cursor.execute('select * from project')
+    cursor.execute('select id, name, creator from asset')
     rows = cursor.fetchall()
-
-    for row in rows:
-        row['created_at'] = row['created_at'].strftime("%Y/%m/%d/ %H:%M:%S")
-        row['updated_at'] = row['updated_at'].strftime("%Y/%m/%d/ %H:%M:%S")
 
     # 커밋
     # cursor.connection.commit()

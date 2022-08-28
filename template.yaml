@@ -158,17 +158,17 @@ Resources:
           Properties:
             Path: /meta/secondary/{primary_id}
             Method: get
-  FindMetadataFunction:
+  FindMetadatasFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: metadata/
-      Handler: findMetadata.lambda_handler
+      Handler: findMetadatas.lambda_handler
       Role: !Ref LambdaRoleArn
       Events:
         FindMetadata:
           Type: Api
           Properties:
-            Path: /meta
+            Path: /metas
             Method: get
   FindMetadataProjectsFunction:
     Type: AWS::Serverless::Function
@@ -224,6 +224,18 @@ Resources:
               Authorizer: CognitoAuth
             Path: /meta/{metadata_id}
             Method: delete
+  FindMetadataFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: metadata/
+      Handler: findMetadata.lambda_handler
+      Role: !Ref LambdaRoleArn
+      Events:
+        DeleteMetadata:
+          Type: Api
+          Properties:
+            Path: /meta/{metadata_id}
+            Method: get
 
 #cognito
   FindUsernameFunction:

@@ -10,7 +10,8 @@ def lambda_handler(event, context):
     asset_id = event['pathParameters']['asset_id']
     name = body_json['name']
     asset_url = body_json['asset_url']
-    image_urls = body_json['image_urls']
+    image_urls = body_json['image_urls'].split(",")
+    print(image_urls)
     details = body_json['details']
     file_hash = body_json['file_hash']
 

@@ -3,57 +3,23 @@ from mysqlConnect import getDictCursor
 
 def lambda_handler(event, context):
 
-    # page offset, sort
-    page = event['queryStringParameters']['page']
+    # 1. body parsing
+    id = event['pathParameters']['metadata_id']
 
-    # if input: OR절 필요
-    where_or = ''
-    if 'input' in event['queryStringParameters'].keys():
-        input = event['queryStringParameters']['input']
-        where_or = f'(m.creator like \'%{input}%\' OR' \
-                   f' m.updater like \'%{input}%\' OR' \
-                   f' detail like \'%{input}%\' OR' \
-                   f' keyword like \'%{input}%\')'
-    print(where_or)
-
-    # 나머지 파라미터
-    parameters = event['queryStringParameters']
-    where_list = []
-    for key in parameters.keys():
-        value = parameters[key]
-        if key in ('page', 'sort', 'input'): continue
-
-        print(value)
-        if key[-2:] == 'id':
-            where_list.append(f'{key} = {value}')
-        else:
-            where_list.append(f'{key} = \'{value}\'')
-
-    where_and = 'AND ' if where_or else ''
-    where_and += ' and '.join(where_list)
-
-    isWhere = 'where' if where_or or where_and else ''
-
-    # 쿼리 시작
-    cursor = getDictCursor()
-    sql = f'select distinct m.id, pc.name, sc.name, detail, gender, m.creator as creator, m.updater as updater, m.created_at as created_at, m.updated_at as updated_at' \
-          f' from metadata m' \
-          f' inner join primary_category as pc on primary_category_id = pc.id' \
-          f' inner join secondary_category as sc on secondary_category_id = sc.id' \
-          f' inner join asset on asset_id = asset.id' \
-          f' left join project on project_id = project.id' \
-          f' left join keyword_metadata as km on keyword_metadata_id = km.metadata_id' \
-          f' left join keyword on km.keyword_id = keyword.id' \
-          f' {isWhere} {where_or} {where_and}' \
-          f' limit 10 offset {page}'
-
-    # sort 추가 필요 !!!
-
+    # 2. meatadata 검색 , keyword 처리
+    sql = f'select * from metadata' \
+          f' inner join keyword_metadata as km on id = km.metadata_id' \
+          f' inner join keyword as k on km.keyword_id = k.keyword' \
+          f' where id = {id}'
     print(sql)
+    cursor = getDictCursor()
     cursor.execute(sql)
     rows = cursor.fetchall()
-    print(rows)
+
+    # 커밋
+    # cursor.connection.commit()
     cursor.connection.close()
+
     for row in rows:
         row['created_at'] = row['created_at'].strftime("%Y/%m/%d/ %H:%M:%S")
         row['updated_at'] = row['updated_at'].strftime("%Y/%m/%d/ %H:%M:%S")

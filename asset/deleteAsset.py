@@ -11,7 +11,7 @@ def lambda_handler(event, context):
         conn = get_connection()
         cur = get_dict_cursor(conn)
         cur.execute(
-            f'SELECT * FROM asset inner join metadata as m on asset.id = m.asset_id where asset.id = {asset_id}')
+            f'SELECT * FROM metadata as m where m.asset_id = {asset_id}')
         query_results = cur.fetchall()
         if len(query_results) == 0:
             return {

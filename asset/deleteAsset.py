@@ -13,17 +13,19 @@ def lambda_handler(event, context):
         cur.execute(
             f'SELECT * FROM metadata as m where m.asset_id = {asset_id}')
         query_results = cur.fetchall()
-        if len(query_results) == 0:
+        print(query_results)
+        if query_results:
             return {
                 "statusCode": 200,
-                "body": "연결된 메타 데이터가 존재합니다. 삭제할 수 없습니다."
+                "body": "failed"
             }
         else:
+            cur.execute(f'DELETE FROM asset_image_urls as u where u.asset_id = {asset_id}')
             cur.execute(f'DELETE FROM asset where asset.id = {asset_id}')
             conn.commit()
             return {
                 "statusCode": 200,
-                "body": "asset 삭제를 성공하였습니다."
+                "body": "success"
             }
     except Exception as e:
         print("Database connection failed due to {}".format(e))

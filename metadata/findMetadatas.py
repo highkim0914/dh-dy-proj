@@ -14,7 +14,8 @@ def lambda_handler(event, context):
         where_or = f'(m.creator like \'%{input}%\' OR' \
                    f' m.updater like \'%{input}%\' OR' \
                    f' detail like \'%{input}%\' OR' \
-                   f' keyword like \'%{input}%\')'
+                   f' keyword like \'%{input}%\' OR' \
+                   f' asset.name like \'%{input}%\')'
         if input is '': where_or = ''
     print(where_or)
 

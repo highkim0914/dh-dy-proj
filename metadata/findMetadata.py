@@ -7,10 +7,10 @@ def lambda_handler(event, context):
     id = event['pathParameters']['metadata_id']
 
     # 2. meatadata 검색 , keyword 처리
-    sql = f'select * from metadata' \
-          f' inner join keyword_metadata as km on id = km.metadata_id' \
-          f' inner join keyword as k on km.keyword_id = k.keyword' \
-          f' where id = {id}'
+    sql = f'select * from metadata as m' \
+          f' inner join keyword_metadata as km on m.id = km.metadata_id' \
+          f' inner join keyword as k on km.keyword_id = k.id' \
+          f' where m.id = {id}'
     print(sql)
     cursor = getDictCursor()
     cursor.execute(sql)

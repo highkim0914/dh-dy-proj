@@ -25,7 +25,7 @@ def lambda_handler(event, context):
         if key in ('page', 'sort', 'input'): continue
 
         value = parameters[key]
-        if value in 'null':
+        if value in ('null' or ''):
             continue
         print(value)
         if key[-2:] == 'id':

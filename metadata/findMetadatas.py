@@ -14,7 +14,6 @@ def lambda_handler(event, context):
         where_or = f'(m.creator like \'%{input}%\' OR' \
                    f' m.updater like \'%{input}%\' OR' \
                    f' detail like \'%{input}%\' OR' \
-                   f' keyword like \'%{input}%\' OR' \
                    f' asset.name like \'%{input}%\')'
         if input is '': where_or = ''
     print(where_or)
@@ -46,15 +45,12 @@ def lambda_handler(event, context):
           f' inner join primary_category as pc on primary_category_id = pc.id' \
           f' inner join secondary_category as sc on secondary_category_id = sc.id' \
           f' inner join asset on asset_id = asset.id' \
-          f' left join project on project_id = project.id' \
-          f' left join keyword_metadata as km on m.id = km.metadata_id' \
-          f' left join keyword on km.keyword_id = keyword.id' \
+          f' inner join metadata_project as mp on m.id = mp.metadata_id' \
+          f' inner join project as p on p.id = mp.project_id' \
           f' {isWhere} {where_or} {where_and}' \
-          f' limit 10 offset {page}'
-
-    # sort 추가 필요 !!!
-
+          # f' limit 10 offset {page}'
     print(sql)
+
     cursor.execute(sql)
     rows = cursor.fetchall()
     for row in rows:

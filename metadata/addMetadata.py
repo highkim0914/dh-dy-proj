@@ -6,7 +6,7 @@ from mysqlConnect import getDictCursor
 def lambda_handler(event, context):
     # 1. 메타 데이터 등록
     metadata = request_parsing(event)
-    sql = f'INSERT INTO metadata(`asset_id`, `primary_category_id`, `secondary_category_id`, `gender`, `detail`, `updated_at`, `created_at`, `creator`, `updater`)' \
+    sql = f'INSERT INTO metadata(`asset_id`, `primary_category_id`, `secondary_category_id`, `project_id`, `gender`, `detail`, `updated_at`, `created_at`, `creator`, `updater`)' \
           f' VALUES {metadata}'
     print(sql)
 
@@ -16,9 +16,10 @@ def lambda_handler(event, context):
     print(id)
 
     # 2. keyword 있는지 확인 -> 없으면 등록
-    keywords = event['body']['keywords']
+    body_json = json.loads(event['body'])
+    keywords = body_json['keywords'].replace(' ', '').split(',')
     for keyword in keywords:
-        print(keyword)
+        if keyword in '': continue
         sql = f'select * from keyword where keyword = \'{keyword}\''
         print(sql)
         cursor.execute(sql)
@@ -39,7 +40,7 @@ def lambda_handler(event, context):
         cursor.execute(sql)
 
     # 4. 커밋
-    # cursor.connection.commit()
+    cursor.connection.commit()
     cursor.connection.close()
     return {
         "statusCode": 201
@@ -47,17 +48,17 @@ def lambda_handler(event, context):
 
 
 def request_parsing(event):
-    body_json = event['body']
+    body_json = json.loads(event['body'])
 
     asset_id = body_json['asset_id']
     primary_category_id = body_json['primary_category_id']
     secondary_category_id = body_json['secondary_category_id']
     gender = body_json['gender']
-    # keyword = body_json['keyword']  # 복수 !!!!!
+    project_id = body_json['project_id']
     detail = body_json['detail']
     now = str(datetime.datetime.now())
-    # request_username = event['requestContext']['authorizer']['claims']['cognito:username']
-    request_username = "testName"
-    meta = (asset_id, primary_category_id, secondary_category_id, gender, detail, now, now, request_username,
+    request_username = event['requestContext']['authorizer']['claims']['cognito:username']
+    # request_username = "testName"
+    meta = (asset_id, primary_category_id, secondary_category_id,project_id, gender, detail, now, now, request_username,
             request_username)
     return meta

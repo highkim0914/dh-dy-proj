@@ -7,7 +7,7 @@ def lambda_handler(event, context):
     # 1. body parsing
     id = event['pathParameters']['metadata_id']
 
-    parameters = event['body']
+    parameters = json.loads(event['body'])
     set_list = []
     for key in parameters.keys():
         value = parameters[key]
@@ -16,6 +16,8 @@ def lambda_handler(event, context):
         if key[-2:] == 'id':
             set_list.append(f'{key} = {value}')
         else:
+            if value in ('null' or ''):
+                continue
             set_list.append(f'{key} = \'{value}\'')
 
     request_username = event['requestContext']['authorizer']['claims']['cognito:username']

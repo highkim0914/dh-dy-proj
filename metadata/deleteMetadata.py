@@ -7,18 +7,14 @@ def lambda_handler(event, context):
     id = event['pathParameters']['metadata_id']
 
     cursor = getDictCursor()
-    # 2. keyword_metadata delete
-    sql = f'delete from keyword_metadata where metadata_id = {id}'
-    print(sql)
-    cursor.execute(sql)
 
-    # 3. metadata delete
+    # 2. metadata delete
     sql = f'delete from metadata where id = {id}'
     print(sql)
     cursor.execute(sql)
 
-    # 4. 커밋
-    # cursor.connection.commit()
+    # 3. 커밋
+    cursor.connection.commit()
     cursor.connection.close()
     return {
         "statusCode": 204

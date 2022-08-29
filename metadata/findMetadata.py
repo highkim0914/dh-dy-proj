@@ -8,6 +8,8 @@ def lambda_handler(event, context):
 
     # 2. meatadata 검색 , keyword 처리
     sql = f'select * from metadata as m' \
+          f' inner join primary_category as pc on primary_category_id = pc.id' \
+          f' inner join secondary_category as sc on secondary_category_id = sc.id' \
           f' where m.id = {id}'
     print(sql)
     cursor = getDictCursor()

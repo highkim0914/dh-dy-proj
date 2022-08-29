@@ -45,8 +45,7 @@ def lambda_handler(event, context):
           f' inner join primary_category as pc on primary_category_id = pc.id' \
           f' inner join secondary_category as sc on secondary_category_id = sc.id' \
           f' inner join asset on asset_id = asset.id' \
-          f' inner join metadata_project as mp on m.id = mp.metadata_id' \
-          f' inner join project as p on p.id = mp.project_id' \
+          f' inner join project as p on p.id = m.project_id' \
           f' {isWhere} {where_or} {where_and}' \
           # f' limit 10 offset {page}'
     print(sql)

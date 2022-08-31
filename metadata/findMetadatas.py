@@ -47,14 +47,15 @@ def lambda_handler(event, context):
           f' inner join asset on asset_id = asset.id' \
           f' inner join project as p on p.id = m.project_id' \
           f' {isWhere} {where_or} {where_and}' \
+          f' order by m.updated_at DESC' \
           # f' limit 10 offset {page}'
     print(sql)
 
     cursor.execute(sql)
     rows = cursor.fetchall()
     for row in rows:
-        row['created_at'] = row['created_at'].strftime("%Y/%m/%d/ %H:%M:%S")
-        row['updated_at'] = row['updated_at'].strftime("%Y/%m/%d/ %H:%M:%S")
+        row['created_at'] = row['created_at'].strftime("%Y/%m/%d")
+        row['updated_at'] = row['updated_at'].strftime("%Y/%m/%d")
 
     # 커밋
     # cursor.connection.commit()

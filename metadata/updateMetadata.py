@@ -36,7 +36,7 @@ def lambda_handler(event, context):
 
 
     # 5. 커밋
-    # cursor.connection.commit()
+    cursor.connection.commit()
     cursor.connection.close()
     return {
         "statusCode": 204

@@ -40,7 +40,7 @@ def lambda_handler(event, context):
 
     # 쿼리 시작
     cursor = getDictCursor()
-    sql = f'select distinct m.id, pc.name, sc.name, detail, gender, m.creator as creator, m.updater as updater, m.created_at as created_at, m.updated_at as updated_at, asset.id as asset_id' \
+    sql = f'select distinct m.id, pc.name, sc.name, detail, gender, p.name as pname, m.creator as creator, m.updater as updater, m.created_at as created_at, m.updated_at as updated_at, asset.id as asset_id' \
           f' from metadata m' \
           f' inner join primary_category as pc on primary_category_id = pc.id' \
           f' inner join secondary_category as sc on secondary_category_id = sc.id' \

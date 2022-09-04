@@ -12,6 +12,7 @@ def lambda_handler(event, context):
         cur = get_dict_cursor(conn)
         cur.execute(f'SELECT * FROM asset where asset.name = {asset_name}')
         query_results = cur.fetchall()
+        conn.close()
         if len(query_results) == 0:
             return {
                 "statusCode": 200,

@@ -15,6 +15,7 @@ def lambda_handler(event, context):
         cur.execute(f'SELECT asset.file_hash FROM asset where asset.id = {asset_id}')
         query_results = cur.fetchall()
         existing_hash = query_results[0]['file_hash']
+        conn.close()
         if uploading_hash == existing_hash:
             return {
                 "statusCode": 200,

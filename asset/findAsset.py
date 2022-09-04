@@ -24,6 +24,7 @@ def lambda_handler(event, context):
         query_results = cur.fetchall()
         for i in range(len(query_results)):
             query_results[i] = {obj: get_str_value(query_results[i][obj]) for obj in query_results[i].keys()}
+        conn.close()
         return {
             "statusCode": 200,
             "body": json.dumps(query_results)

@@ -31,6 +31,7 @@ def lambda_handler(event, context):
             print(insert_image_url_query)
             cur.execute(insert_image_url_query)
         conn.commit()
+        conn.close()
         return {
             "statusCode": 200,
             "body": json.dumps({

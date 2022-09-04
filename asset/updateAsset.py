@@ -52,6 +52,7 @@ def lambda_handler(event, context):
         log = now + "_" + username
         cur.execute(
             f'INSERT INTO logs (`data_id`, `table_code`, `http_method`, `log`) VALUES ("{asset_id}", "1", "{http_method}", "{log}")')
+        conn.close()
         return {
             "statusCode": 200,
             "body": " asset을 수정하였습니다."

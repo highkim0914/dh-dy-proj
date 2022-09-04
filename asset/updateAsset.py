@@ -48,6 +48,10 @@ def lambda_handler(event, context):
                 cur.execute(insert_image_url_query)
 
         conn.commit()
+        http_method = event['httpMethod']
+        log = now + "_" + username
+        cur.execute(
+            f'INSERT INTO logs (`data_id`, `table_code`, `http_method`, `log`) VALUES ("{asset_id}", "1", "{http_method}", "{log}")')
         return {
             "statusCode": 200,
             "body": " asset을 수정하였습니다."

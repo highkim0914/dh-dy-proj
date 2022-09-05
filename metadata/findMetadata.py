@@ -19,7 +19,7 @@ def lambda_handler(event, context):
     rows = cursor.fetchall()
 
     # 커밋
-    cursor.commit()
+    conn.commit()
 
     for row in rows:
         row['created_at'] = row['created_at'].strftime("%Y/%m/%d/ %H:%M:%S")

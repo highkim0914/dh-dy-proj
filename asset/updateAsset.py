@@ -4,7 +4,10 @@ import pymysql
 import json
 from dbConnect import *
 
-
+try:
+    conn = get_connection()
+except Exception as e:
+    print("Database connection failed due to {}".format(e))
 def lambda_handler(event, context):
     body_json = json.loads(event['body'])
     asset_id = event['pathParameters']['asset_id']
@@ -19,7 +22,6 @@ def lambda_handler(event, context):
     username = event['requestContext']['authorizer']['claims']['cognito:username']
 
     try:
-        conn = get_connection()
         cur = get_dict_cursor(conn)
         select_query = f'SELECT * FROM asset where id = {asset_id}'
         print(select_query)
@@ -47,6 +49,10 @@ def lambda_handler(event, context):
                 print(insert_image_url_query)
                 cur.execute(insert_image_url_query)
 
+        http_method = event['httpMethod']
+        log = now + "_" + username
+        cur.execute(
+            f'INSERT INTO logs (`data_id`, `table_code`, `http_method`, `log`) VALUES ("{asset_id}", "1", "{http_method}", "{log}")')
         conn.commit()
         return {
             "statusCode": 200,

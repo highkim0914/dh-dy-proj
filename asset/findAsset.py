@@ -4,6 +4,11 @@ import pymysql
 import json
 from dbConnect import *
 
+try:
+    conn = get_connection()
+except Exception as e:
+    print("Database connection failed due to {}".format(e))
+
 
 def get_str_value(obj):
     if isinstance(obj, datetime.datetime):
@@ -16,7 +21,6 @@ def lambda_handler(event, context):
     asset_id = event['pathParameters']['asset_id']
     print(asset_id)
     try:
-        conn = get_connection()
         cur = get_dict_cursor(conn)
         cur.execute(
             f'SELECT * FROM asset inner join asset_image_urls as aiu on asset.id = aiu.asset_id '
@@ -24,6 +28,7 @@ def lambda_handler(event, context):
         query_results = cur.fetchall()
         for i in range(len(query_results)):
             query_results[i] = {obj: get_str_value(query_results[i][obj]) for obj in query_results[i].keys()}
+        conn.commit()
         return {
             "statusCode": 200,
             "body": json.dumps(query_results)

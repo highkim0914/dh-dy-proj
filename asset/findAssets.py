@@ -4,6 +4,12 @@ import pymysql
 import json
 from dbConnect import *
 
+try:
+    conn = get_connection()
+except Exception as e:
+    print("Database connection failed due to {}".format(e))
+
+
 def get_str_value(obj):
     if isinstance(obj, datetime.datetime):
         return str(obj)
@@ -40,7 +46,6 @@ def lambda_handler(event, context):
     sort = event['queryStringParameters']['sort']
     sort_by, how = sort.split(",")
     try:
-        conn = get_connection()
         cur = get_dict_cursor(conn)
         sql_query = f'WITH filter as (' \
                     f'SELECT a.id, a.name, a.creator, a.updater, a.created_at, a.updated_at, a.asset_url, a.details, ' \
@@ -55,6 +60,7 @@ def lambda_handler(event, context):
         for i in range(len(query_results)):
             query_results[i] = {obj: get_str_value(query_results[i][obj]) for obj in query_results[i].keys()}
         print(query_results)
+        conn.commit()
         return {
             "statusCode": 200,
             "body": json.dumps(query_results)

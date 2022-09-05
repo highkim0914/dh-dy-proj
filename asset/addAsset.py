@@ -4,7 +4,10 @@ import pymysql
 import json
 from dbConnect import *
 
-
+try:
+    conn = get_connection()
+except Exception as e:
+    print("Database connection failed due to {}".format(e))
 def lambda_handler(event, context):
     body_json = json.loads(event['body'])
     name = body_json['name']

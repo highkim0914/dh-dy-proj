@@ -9,12 +9,12 @@ def lambda_handler(event, context):
 
     cursor.execute("select id, name from secondary_category where primary_category_id = %s", (primary_id))
     rows = cursor.fetchall()
-    res = [dict((cursor.description[i][0], value) \
-          for i, value in enumerate(row)) for row in rows]
+    # res = [dict((cursor.description[i][0], value) \
+    #       for i, value in enumerate(row)) for row in rows]
 
     conn.commit()
     return {
         "statusCode": 200,
-        "body":json.dumps(res)
+        "body":json.dumps(rows)
     }
 

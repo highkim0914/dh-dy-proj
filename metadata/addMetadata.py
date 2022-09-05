@@ -1,7 +1,8 @@
 import json
 import datetime
-from mysqlConnect import getDictCursor
+from dbConnect import *
 
+conn = get_connection()
 
 def lambda_handler(event, context):
     # 1. 메타 데이터 등록
@@ -10,18 +11,14 @@ def lambda_handler(event, context):
           f' VALUES {metadata}'
     print(sql)
 
-    cursor = getDictCursor()
+    cursor = get_dict_cursor(conn)
     cursor.execute(sql)
-    # metadata_id = cursor.connection.insert_id()
-    # print(metadata_id)
 
     # 4. 커밋
-    cursor.connection.commit()
-    cursor.connection.close()
+    conn.commit()
     return {
         "statusCode": 201
     }
-
 
 def request_parsing(event):
     body_json = json.loads(event['body'])

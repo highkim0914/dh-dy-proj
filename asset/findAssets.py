@@ -4,7 +4,6 @@ import pymysql
 import json
 from dbConnect import *
 
-
 def get_str_value(obj):
     if isinstance(obj, datetime.datetime):
         return str(obj)

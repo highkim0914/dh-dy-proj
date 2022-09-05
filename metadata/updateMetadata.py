@@ -1,7 +1,8 @@
 import json
 import datetime
-from mysqlConnect import getDictCursor
+from dbConnect import *
 
+conn = get_connection()
 def lambda_handler(event, context):
 
     # 1. body parsing
@@ -31,13 +32,11 @@ def lambda_handler(event, context):
     # 2. alter sql
     sql = f'UPDATE metadata {set} WHERE id = {id}'
     print(set)
-    cursor = getDictCursor()
+    cursor = get_dict_cursor(conn)
     cursor.execute(sql)
 
-
     # 5. 커밋
-    cursor.connection.commit()
-    cursor.connection.close()
+    conn.commit()
     return {
         "statusCode": 204
     }

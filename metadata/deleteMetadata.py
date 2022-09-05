@@ -1,12 +1,14 @@
 import json
-from mysqlConnect import getDictCursor
+from dbConnect import *
+
+conn = get_connection()
 
 def lambda_handler(event, context):
 
     # 1. 파싱
     id = event['pathParameters']['metadata_id']
 
-    cursor = getDictCursor()
+    cursor = get_dict_cursor(conn)
 
     # 2. metadata delete
     sql = f'delete from metadata where id = {id}'
@@ -14,8 +16,7 @@ def lambda_handler(event, context):
     cursor.execute(sql)
 
     # 3. 커밋
-    cursor.connection.commit()
-    cursor.connection.close()
+    conn.commit()
     return {
         "statusCode": 204
     }

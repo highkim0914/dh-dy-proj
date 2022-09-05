@@ -1,8 +1,10 @@
 import json
-from mysqlConnect import getCursor
+from dbConnect import *
+
+conn = get_connection()
 
 def lambda_handler(event, context):
-    cursor = getCursor()
+    cursor = get_dict_cursor(conn)
     primary_id = event['pathParameters']['primary_id']
 
     cursor.execute("select id, name from secondary_category where primary_category_id = %s", (primary_id))
@@ -10,7 +12,7 @@ def lambda_handler(event, context):
     res = [dict((cursor.description[i][0], value) \
           for i, value in enumerate(row)) for row in rows]
 
-    cursor.connection.close()
+    conn.commit()
     return {
         "statusCode": 200,
         "body":json.dumps(res)

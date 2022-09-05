@@ -1,6 +1,8 @@
 import boto3
 import pymysql
 import json
+import logging
+import sys
 
 ENDPOINT = "mysql.c14b7b28namw.ap-northeast-2.rds.amazonaws.com"  # rds endpoint
 PORT = "3306"
@@ -8,6 +10,9 @@ USER = "admin"
 REGION = "ap-northeast-2"
 DBNAME = "uplus"
 
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 def get_secret():
     client = boto3.client('secretsmanager')
@@ -25,6 +30,9 @@ def get_connection():
         return conn
     except Exception as e:
         print("Database connection failed due to {}".format(e))
+        logger.error("ERROR : Could not connect to MySQL instance")
+        logger.error(e)
+        sys.exit()
 
 def get_cursor(conn):
     return conn.cursor()

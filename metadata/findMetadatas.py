@@ -1,5 +1,7 @@
 import json
-from mysqlConnect import getDictCursor
+from dbConnect import *
+
+conn = get_connection()
 
 def lambda_handler(event, context):
 
@@ -39,7 +41,6 @@ def lambda_handler(event, context):
     isWhere = 'where' if where_or or where_and else ''
 
     # 쿼리 시작
-    cursor = getDictCursor()
     sql = f'select distinct m.id, pc.name, sc.name, detail, gender, p.name as pname, m.creator as creator, m.updater as updater, m.created_at as created_at, m.updated_at as updated_at, asset.id as asset_id' \
           f' from metadata m' \
           f' inner join primary_category as pc on primary_category_id = pc.id' \
@@ -49,8 +50,8 @@ def lambda_handler(event, context):
           f' {isWhere} {where_or} {where_and}' \
           f' order by m.updated_at DESC' \
           # f' limit 10 offset {page}'
-    print(sql)
 
+    cursor = get_dict_cursor(conn)
     cursor.execute(sql)
     rows = cursor.fetchall()
     for row in rows:
@@ -59,7 +60,6 @@ def lambda_handler(event, context):
 
     # 커밋
     # cursor.connection.commit()
-    cursor.connection.close()
 
     return {
         "statusCode": 200,

@@ -1,8 +1,10 @@
 import json
-from mysqlConnect import getDictCursor
+from dbConnect import *
+
+conn = get_connection()
 
 def lambda_handler(event, context):
-    cursor = getDictCursor()
+    cursor = get_dict_cursor(conn)
 
 
     cursor.execute('select * from project')
@@ -13,8 +15,7 @@ def lambda_handler(event, context):
         row['updated_at'] = row['updated_at'].strftime("%Y/%m/%d/ %H:%M:%S")
 
     # 커밋
-    # cursor.connection.commit()
-    cursor.connection.close()
+    conn.commit()
     return {
         "statusCode": 200,
         "body":json.dumps(rows)

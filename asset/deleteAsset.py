@@ -29,7 +29,6 @@ def lambda_handler(event, context):
             cur.execute(f'DELETE FROM asset_image_urls as u where u.asset_id = {asset_id}')
             cur.execute(f'DELETE FROM asset where asset.id = {asset_id}')
             conn.commit()
-            conn.close()
             return {
                 "statusCode": 200,
                 "body": "success"

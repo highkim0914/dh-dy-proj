@@ -40,10 +40,6 @@ Parameters:
     Type: String
     Default: arn:aws:iam::471413481509:role/awssamlambdarole
 
-# Event Bridge
-
-
-
 Resources:
 #asset
   FindAssetFunction:
@@ -58,6 +54,10 @@ Resources:
           Properties:
             Path: /assets/{asset_id}
             Method: get
+        ScheduledFunction:
+          Type: Schedule
+          Properties:
+            Schedule: rate(4 minutes)
   FindAssetsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -70,6 +70,10 @@ Resources:
           Properties:
             Path: /assets
             Method: get
+        ScheduledFunction:
+          Type: Schedule
+          Properties:
+            Schedule: rate(4 minutes)
   AddAssetFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -84,6 +88,10 @@ Resources:
               Authorizer: CognitoAuth
             Path: /assets
             Method: post
+        ScheduledFunction:
+          Type: Schedule
+          Properties:
+            Schedule: rate(4 minutes)
   UpdateAssetFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -98,6 +106,10 @@ Resources:
               Authorizer: CognitoAuth
             Path: /assets/{asset_id}
             Method: put
+        ScheduledFunction:
+          Type: Schedule
+          Properties:
+            Schedule: rate(4 minutes)
   DeleteAssetFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -112,6 +124,10 @@ Resources:
               Authorizer: CognitoAuth
             Path: /assets/{asset_id}
             Method: delete
+        ScheduledFunction:
+          Type: Schedule
+          Properties:
+            Schedule: rate(4 minutes)
   CheckAssetNameFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -124,6 +140,10 @@ Resources:
           Properties:
             Path: /assets/names/{asset_name}
             Method: get
+        ScheduledFunction:
+          Type: Schedule
+          Properties:
+            Schedule: rate(4 minutes)
   CheckAssetFileHashFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -136,6 +156,10 @@ Resources:
           Properties:
             Path: /assets/{asset_id}/hash
             Method: get
+        ScheduledFunction:
+          Type: Schedule
+          Properties:
+            Schedule: rate(4 minutes)
 # metadata
   FindPrimaryCategoryFunction:
     Type: AWS::Serverless::Function

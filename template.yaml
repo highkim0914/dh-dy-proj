@@ -58,10 +58,6 @@ Resources:
           Properties:
             Path: /assets/{asset_id}
             Method: get
-        ScheduledFunction:
-          Type: Schedule
-          properties:
-            Schedule: rate(4 minute)
   FindAssetsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -74,10 +70,6 @@ Resources:
           Properties:
             Path: /assets
             Method: get
-        ScheduledFunction:
-          Type: Schedule
-          properties:
-            Schedule: rate(4 minute)
   AddAssetFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -92,10 +84,6 @@ Resources:
               Authorizer: CognitoAuth
             Path: /assets
             Method: post
-        ScheduledFunction:
-          Type: Schedule
-          properties:
-            Schedule: rate(4 minute)
   UpdateAssetFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -110,10 +98,6 @@ Resources:
               Authorizer: CognitoAuth
             Path: /assets/{asset_id}
             Method: put
-        ScheduledFunction:
-          Type: Schedule
-          properties:
-            Schedule: rate(4 minute)
   DeleteAssetFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -128,10 +112,6 @@ Resources:
               Authorizer: CognitoAuth
             Path: /assets/{asset_id}
             Method: delete
-        ScheduledFunction:
-          Type: Schedule
-          properties:
-            Schedule: rate(4 minute)
   CheckAssetNameFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -144,10 +124,6 @@ Resources:
           Properties:
             Path: /assets/names/{asset_name}
             Method: get
-        ScheduledFunction:
-          Type: Schedule
-          properties:
-            Schedule: rate(4 minute)
   CheckAssetFileHashFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -160,10 +136,6 @@ Resources:
           Properties:
             Path: /assets/{asset_id}/hash
             Method: get
-        ScheduledFunction:
-          Type: Schedule
-          properties:
-            Schedule: rate(4 minute)
 # metadata
   FindPrimaryCategoryFunction:
     Type: AWS::Serverless::Function
@@ -180,7 +152,7 @@ Resources:
         ScheduledFunction:
           Type: Schedule
           properties:
-            Schedule: rate(4 minute)
+            Schedule: rate(4 minutes)
   FindSecondaryCategoryFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -196,7 +168,7 @@ Resources:
         ScheduledFunction:
           Type: Schedule
           properties:
-            Schedule: rate(4 minute)
+            Schedule: rate(4 minutes)
   FindMetadatasFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -212,7 +184,7 @@ Resources:
         ScheduledFunction:
           Type: Schedule
           properties:
-            Schedule: rate(4 minute)
+            Schedule: rate(4 minutes)
   FindMetadataProjectsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -228,7 +200,7 @@ Resources:
         ScheduledFunction:
           Type: Schedule
           properties:
-            Schedule: rate(4 minute)
+            Schedule: rate(4 minutes)
   FindMetadataAssetsFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -244,7 +216,7 @@ Resources:
         ScheduledFunction:
           Type: Schedule
           properties:
-            Schedule: rate(4 minute)
+            Schedule: rate(4 minutes)
   AddMetadataFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -262,7 +234,7 @@ Resources:
         ScheduledFunction:
           Type: Schedule
           properties:
-            Schedule: rate(4 minute)
+            Schedule: rate(4 minutes)
   UpdateMetadataFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -280,7 +252,7 @@ Resources:
         ScheduledFunction:
           Type: Schedule
           properties:
-            Schedule: rate(4 minute)
+            Schedule: rate(4 minutes)
   DeleteMetadataFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -298,7 +270,7 @@ Resources:
         ScheduledFunction:
           Type: Schedule
           properties:
-            Schedule: rate(4 minute)
+            Schedule: rate(4 minutes)
   FindMetadataFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -314,7 +286,7 @@ Resources:
         ScheduledFunction:
           Type: Schedule
           properties:
-            Schedule: rate(4 minute)
+            Schedule: rate(4 minutes)
 
 #cognito
   FindUsernameFunction:
@@ -331,10 +303,6 @@ Resources:
               Authorizer: CognitoAuth
             Path: /cognito
             Method: get
-        ScheduledFunction:
-          Type: Schedule
-          properties:
-            Schedule: rate(4 minute)
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

@@ -35,6 +35,11 @@ def lambda_handler(event, context):
     cursor = get_dict_cursor(conn)
     cursor.execute(sql)
     a=1
+    # 로깅
+    http_method = event['httpMethod']
+    log = now + "_" + request_username
+    cursor.execute(
+        f'INSERT INTO logs (`data_id`, `table_code`, `http_method`, `log`) VALUES ("{id}", "0", "{http_method}", "{log}")')
     # 5. 커밋
     conn.commit()
     return {

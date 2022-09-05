@@ -183,7 +183,7 @@ Resources:
             Method: get
         ScheduledFunction:
           Type: Schedule
-          properties:
+          Properties:
             Schedule: rate(4 minutes)
   FindMetadataProjectsFunction:
     Type: AWS::Serverless::Function

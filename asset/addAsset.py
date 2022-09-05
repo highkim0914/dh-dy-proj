@@ -4,7 +4,10 @@ import pymysql
 import json
 from dbConnect import *
 
-
+try:
+    conn = get_connection()
+except Exception as e:
+    print("Database connection failed due to {}".format(e))
 def lambda_handler(event, context):
     body_json = json.loads(event['body'])
     name = body_json['name']
@@ -31,7 +34,6 @@ def lambda_handler(event, context):
             print(insert_image_url_query)
             cur.execute(insert_image_url_query)
         conn.commit()
-        conn.close()
         return {
             "statusCode": 200,
             "body": json.dumps({

@@ -4,18 +4,23 @@ import pymysql
 import json
 from dbConnect import *
 
+try:
+    conn = get_connection()
+except Exception as e:
+    print("Database connection failed due to {}".format(e))
+
+
 def lambda_handler(event, context):
     asset_id = event['pathParameters']['asset_id']
     print(asset_id)
     try:
-        conn = get_connection()
         cur = get_dict_cursor(conn)
         cur.execute(
             f'SELECT * FROM metadata as m where m.asset_id = {asset_id}')
         query_results = cur.fetchall()
         print(query_results)
         if query_results:
-            conn.close()
+            conn.commit()
             return {
                 "statusCode": 200,
                 "body": "failed"

@@ -4,7 +4,7 @@ from dbConnect import *
 conn = get_connection()
 
 def lambda_handler(event, context):
-    cursor = get_cursor(conn)
+    cursor = get_dict_cursor(conn)
     cursor.execute("select * from primary_category")
     rows = cursor.fetchall()
     print(rows)

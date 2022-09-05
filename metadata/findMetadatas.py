@@ -59,7 +59,7 @@ def lambda_handler(event, context):
         row['updated_at'] = row['updated_at'].strftime("%Y/%m/%d")
 
     # 커밋
-    # cursor.connection.commit()
+    conn.commit()
 
     return {
         "statusCode": 200,

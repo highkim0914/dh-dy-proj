@@ -34,7 +34,7 @@ def lambda_handler(event, context):
     print(set)
     cursor = get_dict_cursor(conn)
     cursor.execute(sql)
-
+    a=1
     # 5. 커밋
     conn.commit()
     return {

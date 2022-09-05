@@ -151,7 +151,7 @@ Resources:
             Method: get
         ScheduledFunction:
           Type: Schedule
-          properties:
+          Properties:
             Schedule: rate(4 minutes)
   FindSecondaryCategoryFunction:
     Type: AWS::Serverless::Function
@@ -167,7 +167,7 @@ Resources:
             Method: get
         ScheduledFunction:
           Type: Schedule
-          properties:
+          Properties:
             Schedule: rate(4 minutes)
   FindMetadatasFunction:
     Type: AWS::Serverless::Function
@@ -199,7 +199,7 @@ Resources:
             Method: get
         ScheduledFunction:
           Type: Schedule
-          properties:
+          Properties:
             Schedule: rate(4 minutes)
   FindMetadataAssetsFunction:
     Type: AWS::Serverless::Function
@@ -215,7 +215,7 @@ Resources:
             Method: get
         ScheduledFunction:
           Type: Schedule
-          properties:
+          Properties:
             Schedule: rate(4 minutes)
   AddMetadataFunction:
     Type: AWS::Serverless::Function
@@ -233,7 +233,7 @@ Resources:
             Method: post
         ScheduledFunction:
           Type: Schedule
-          properties:
+          Properties:
             Schedule: rate(4 minutes)
   UpdateMetadataFunction:
     Type: AWS::Serverless::Function
@@ -251,7 +251,7 @@ Resources:
             Method: put
         ScheduledFunction:
           Type: Schedule
-          properties:
+          Properties:
             Schedule: rate(4 minutes)
   DeleteMetadataFunction:
     Type: AWS::Serverless::Function
@@ -269,7 +269,7 @@ Resources:
             Method: delete
         ScheduledFunction:
           Type: Schedule
-          properties:
+          Properties:
             Schedule: rate(4 minutes)
   FindMetadataFunction:
     Type: AWS::Serverless::Function
@@ -285,7 +285,7 @@ Resources:
             Method: get
         ScheduledFunction:
           Type: Schedule
-          properties:
+          Properties:
             Schedule: rate(4 minutes)
 
 #cognito
